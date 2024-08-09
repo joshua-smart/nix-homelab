@@ -35,6 +35,7 @@
       domain = "jsmart.dev";
       record-name = "@";
       key-file = config.age.secrets."gandi-api-key.env".path;
+      update-interval = "15m";
     };
   };
 
