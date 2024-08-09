@@ -1,4 +1,8 @@
 { ... }:
 {
-  imports = [ ./gandi-dynamic-dns.nix ];
+  imports = [
+    ./gandi-dynamic-dns.nix
+    ./openssh.nix
+    ./fail2ban.nix
+  ];
 }
