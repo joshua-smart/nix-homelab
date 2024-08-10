@@ -51,6 +51,7 @@
 
       deploy.nodes.server = {
         hostname = "jsmart.dev";
+        sshUser = "admin";
         profiles.system = {
           user = "root";
           path = deploy-rs.lib.${system}.activate.nixos self.nixosConfigurations.server;

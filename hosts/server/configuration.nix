@@ -14,7 +14,6 @@
   networking.hostName = host;
 
   users.users.js = {
-    uid = 1000;
     isNormalUser = true;
     description = "Joshua Smart";
     extraGroups = [
@@ -23,13 +22,18 @@
     ];
   };
 
+  users.users.admin = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" ];
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM3PCmL6yPMIM3iV1CSoWmrAknwgFSEwQmGp6xBEs5NN js@laptop"
+    ];
+  };
+
   age.secrets."gandi-api-key.env".file = ../../secrets/gandi-api-key.env.age;
 
   services = {
-    paperless = {
-      enable = true;
-      address = "0.0.0.0";
-    };
+    paperless.enable = true;
     gandi-dynamic-dns = {
       enable = true;
       domain = "jsmart.dev";
@@ -68,18 +72,18 @@
         extraOptions = [ "--network=container:v5-minecraft" ];
       };
 
-      nginx-proxy-manager = {
-        image = "jc21/nginx-proxy-manager";
-        ports = [
-          "80:80"
-          "443:443"
-        ];
-        volumes = [
-          "/home/js/containers/nginx-proxy-manager/data:/data"
-          "/home/js/containers/nginx-proxy-manager/letsencrypt:/etc/letsencrypt"
-        ];
-        extraOptions = [ "--network=proxy" ];
-      };
+      # nginx-proxy-manager = {
+      #   image = "jc21/nginx-proxy-manager";
+      #   ports = [
+      #     "80:80"
+      #     "443:443"
+      #   ];
+      #   volumes = [
+      #     "/home/js/containers/nginx-proxy-manager/data:/data"
+      #     "/home/js/containers/nginx-proxy-manager/letsencrypt:/etc/letsencrypt"
+      #   ];
+      #   extraOptions = [ "--network=proxy" ];
+      # };
 
       static-file-server = {
         image = "halverneus/static-file-server";
