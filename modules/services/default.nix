@@ -6,5 +6,7 @@
     ./fail2ban.nix
     ./paperless.nix
     ./nginx.nix
+    ./wireguard.nix
+    ./filebrowser.nix
   ];
 }

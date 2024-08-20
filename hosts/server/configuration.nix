@@ -24,7 +24,10 @@
 
   users.users.admin = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [
+      "wheel"
+      "docker"
+    ];
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM3PCmL6yPMIM3iV1CSoWmrAknwgFSEwQmGp6xBEs5NN js@laptop"
     ];
@@ -41,7 +44,21 @@
       key-file = config.age.secrets."gandi-api-key.env".path;
       update-interval = "15m";
     };
+    filebrowser.enable = true;
   };
+
+  # services.minecraft-servers = {
+  #   eula = true;
+
+  #   servers.v5-minecraft = {
+  #     enable = true;
+  #     package = pkgs.minecraftServers.paper-1_21;
+  #     jvmOpts = "-Xms4096M -Xmx8192M";
+  #     serverProperties = {
+  #       server-port = 25567;
+  #     };
+  #   };
+  # };
 
   virtualisation.oci-containers = {
     backend = "docker";
@@ -70,25 +87,6 @@
         ];
         dependsOn = [ "v5-minecraft" ];
         extraOptions = [ "--network=container:v5-minecraft" ];
-      };
-
-      # nginx-proxy-manager = {
-      #   image = "jc21/nginx-proxy-manager";
-      #   ports = [
-      #     "80:80"
-      #     "443:443"
-      #   ];
-      #   volumes = [
-      #     "/home/js/containers/nginx-proxy-manager/data:/data"
-      #     "/home/js/containers/nginx-proxy-manager/letsencrypt:/etc/letsencrypt"
-      #   ];
-      #   extraOptions = [ "--network=proxy" ];
-      # };
-
-      static-file-server = {
-        image = "halverneus/static-file-server";
-        volumes = [ "/home/js/containers/static-file-server:/web" ];
-        extraOptions = [ "--network=proxy" ];
       };
     };
   };

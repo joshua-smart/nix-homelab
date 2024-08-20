@@ -12,6 +12,11 @@
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-minecraft = {
+      url = "github:Infinidoge/nix-minecraft";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -20,6 +25,7 @@
       nixpkgs,
       agenix,
       deploy-rs,
+      nix-minecraft,
       ...
     }:
     let
@@ -27,6 +33,7 @@
       lib = nixpkgs.lib;
 
       pkgs = import nixpkgs {
+        overlays = [ nix-minecraft.overlay ];
         inherit system;
         config.allowUnfree = true;
       };
@@ -38,6 +45,7 @@
           modules = [
             ./hosts/${host}/configuration.nix
             agenix.nixosModules.default
+            nix-minecraft.nixosModules.minecraft-servers
           ];
           specialArgs = {
             inherit host;
