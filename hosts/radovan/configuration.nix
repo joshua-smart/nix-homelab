@@ -6,7 +6,6 @@
   ];
 
   profiles = {
-    boot.enable = true;
     localisation.enable = true;
     remote.enable = true;
   };
