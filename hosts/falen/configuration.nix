@@ -5,6 +5,12 @@
     ../../modules
   ];
 
+  # Free up to 1GiB whenever there is less than 100MiB left.
+  nix.extraOptions = ''
+    min-free = ${toString (100 * 1024 * 1024)}
+    max-free = ${toString (1024 * 1024 * 1024)}
+  '';
+
   profiles = {
     remote.enable = true;
     localisation.enable = true;
