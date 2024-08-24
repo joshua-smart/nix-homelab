@@ -1,4 +1,11 @@
 {
+  nixConfig = {
+    extra-substituters = [ "https://nix-community.cachix.org" ];
+    extra-trusted-public-keys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
+  };
+
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-24.05";
 
@@ -12,11 +19,6 @@
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nix-minecraft = {
-      url = "github:Infinidoge/nix-minecraft";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
@@ -25,47 +27,59 @@
       nixpkgs,
       agenix,
       deploy-rs,
-      nix-minecraft,
       ...
     }:
     let
-      system = "x86_64-linux";
-      lib = nixpkgs.lib;
-
-      pkgs = import nixpkgs {
-        overlays = [ nix-minecraft.overlay ];
-        inherit system;
-        config.allowUnfree = true;
-      };
-
-      myNixosSystem =
-        host:
-        lib.nixosSystem {
-          inherit pkgs system;
-          modules = [
-            ./hosts/${host}/configuration.nix
-            agenix.nixosModules.default
-            nix-minecraft.nixosModules.minecraft-servers
-          ];
-          specialArgs = {
-            inherit host;
-          };
-        };
+      inherit (nixpkgs.lib) nixosSystem;
     in
     {
       nixosConfigurations = {
-        server = myNixosSystem "server";
-      };
-
-      deploy.nodes.server = {
-        hostname = "jsmart.dev";
-        sshUser = "admin";
-        profiles.system = {
-          user = "root";
-          path = deploy-rs.lib.${system}.activate.nixos self.nixosConfigurations.server;
+        radovan = nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./hosts/radovan/configuration.nix
+            agenix.nixosModules.default
+          ];
+          specialArgs = {
+            host = "radovan";
+          };
+        };
+        falen = nixosSystem {
+          system = "aarch64-linux";
+          modules = [
+            ./hosts/falen/configuration.nix
+            agenix.nixosModules.default
+          ];
         };
       };
 
-      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+      deploy.nodes = {
+        radovan = {
+          hostname = "jsmart.dev";
+          sshUser = "admin";
+          profiles.system = {
+            user = "root";
+            path = deploy-rs.lib."x86_64-linux".activate.nixos self.nixosConfigurations.radovan;
+          };
+        };
+        falen = {
+          hostname = "192.168.0.153";
+          sshUser = "admin";
+          profiles.system = {
+            user = "root";
+            path = deploy-rs.lib."aarch64-linux".activate.nixos self.nixosConfigurations.falen;
+          };
+          remoteBuild = true;
+        };
+      };
+
+      checks = builtins.mapAttrs (
+        system: deployLib:
+        deployLib.deployChecks {
+          nodes = {
+            inherit (self.deploy.nodes) radovan;
+          };
+        }
+      ) deploy-rs.lib;
     };
 }
