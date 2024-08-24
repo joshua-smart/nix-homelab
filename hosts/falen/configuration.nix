@@ -16,6 +16,15 @@
     localisation.enable = true;
   };
 
+  age.secrets."gandi-api-key.env".file = ../../secrets/gandi-api-key.env.age;
+
+  services = {
+    gandi-dynamic-dns = {
+      enable = true;
+      domain = "jsmart.dev";
+      record-name = "falen.hosts";
+      key-file = config.age.secrets."gandi-api-key.env".path;
+      update-interval = "15m";
     };
   };
 

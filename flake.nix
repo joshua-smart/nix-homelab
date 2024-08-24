@@ -73,6 +73,7 @@
         };
       };
 
+      # host 'falen' is ommitted from checks as it cannot be build on x86_64-linux
       checks = builtins.mapAttrs (
         system: deployLib:
         deployLib.deployChecks {
