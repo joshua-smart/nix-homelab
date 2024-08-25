@@ -1,5 +1,7 @@
 { config, lib, ... }:
-with lib;
+let
+  inherit (lib) mkIf;
+in
 {
   config = mkIf config.services.openssh.enable {
     services.openssh = {

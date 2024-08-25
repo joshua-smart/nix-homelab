@@ -63,7 +63,7 @@
           };
         };
         falen = {
-          hostname = "192.168.0.153";
+          hostname = "falen.hosts.jsmart.dev";
           sshUser = "admin";
           profiles.system = {
             user = "root";

@@ -1,6 +1,11 @@
 { config, lib, ... }:
-with lib;
 let
+  inherit (lib)
+    mkEnableOption
+    mkOption
+    mkIf
+    types
+    ;
   cfg = config.services.gandi-dynamic-dns;
 in
 {

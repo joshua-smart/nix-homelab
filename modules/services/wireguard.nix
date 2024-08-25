@@ -1,5 +1,7 @@
 { config, lib, ... }:
-with lib;
+let
+  inherit (lib) mkEnableOption mkIf;
+in
 {
   options.services.wireguard.enable = mkEnableOption "wireguard service";
 

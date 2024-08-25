@@ -1,7 +1,9 @@
 # Update to module when https://github.com/NixOS/nixpkgs/pull/289750 merges
 
 { config, lib, ... }:
-with lib;
+let
+  inherit (lib) mkEnableOption mkIf;
+in
 {
   options.services.filebrowser.enable = mkEnableOption "filebrowser service";
 
