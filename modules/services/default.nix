@@ -8,5 +8,6 @@
     ./nginx.nix
     ./wireguard.nix
     ./filebrowser.nix
+    ./adguardhome.nix
   ];
 }

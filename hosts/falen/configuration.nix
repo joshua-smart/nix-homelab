@@ -26,6 +26,7 @@
       key-file = config.age.secrets."gandi-api-key.env".path;
       update-interval = "15m";
     };
+    adguardhome.enable = true;
   };
 
   age.secrets."26t-network.env".file = ../../secrets/26t-network.env.age;
@@ -44,17 +45,6 @@
     vim
     helix
   ];
-
-  networking.firewall = {
-    allowedTCPPorts = [ 53 ];
-    allowedUDPPorts = [ 53 ];
-  };
-
-  services.adguardhome = {
-    enable = true;
-    openFirewall = true;
-    port = 80;
-  };
 
   users = {
     users.admin = {
