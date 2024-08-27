@@ -39,7 +39,7 @@
         "dmask=0022"
       ];
     };
-    "/home/js/bulk" = {
+    "/bulk" = {
       device = "/dev/disk/by-uuid/378c007e-e97b-4362-b653-c63e607ef1dc";
     };
   };
