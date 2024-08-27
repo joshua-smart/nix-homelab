@@ -1,2 +1,1 @@
 flake: nix-minecraft server config
-pi storage solution?: https://github.com/LongerHV/nixos-configuration/blob/cb55b59062c27caa7ba52fe59f9b43b0e6bbeeb7/nixos/smaug/default.nix#L46C2-L49C6

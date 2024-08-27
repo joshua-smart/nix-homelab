@@ -1,16 +1,23 @@
-{ config, host, ... }:
+{
+  config,
+  pkgs,
+  nix-minecraft,
+  ...
+}:
 {
   imports = [
     ./hardware-configuration.nix
     ../../modules
+    nix-minecraft.nixosModules.minecraft-servers
   ];
+  nixpkgs.overlays = [ nix-minecraft.overlay ];
 
   profiles = {
     localisation.enable = true;
     remote.enable = true;
   };
 
-  networking.hostName = host;
+  networking.hostName = "radovan";
 
   users.users.js = {
     isNormalUser = true;
@@ -30,6 +37,7 @@
     extraGroups = [
       "wheel"
       "docker"
+      "minecraft"
     ];
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM3PCmL6yPMIM3iV1CSoWmrAknwgFSEwQmGp6xBEs5NN js@laptop"
@@ -49,20 +57,23 @@
       update-interval = "15m";
     };
     filebrowser.enable = true;
+    wireguard.enable = true;
   };
 
-  # services.minecraft-servers = {
-  #   eula = true;
+  services.minecraft-servers = {
+    enable = true;
+    eula = true;
+    openFirewall = true;
 
-  #   servers.v5-minecraft = {
-  #     enable = true;
-  #     package = pkgs.minecraftServers.paper-1_21;
-  #     jvmOpts = "-Xms4096M -Xmx8192M";
-  #     serverProperties = {
-  #       server-port = 25567;
-  #     };
-  #   };
-  # };
+    servers.season-5 = {
+      enable = true;
+      package = pkgs.minecraftServers.paper-1_21;
+      jvmOpts = "-Xms4096M -Xmx8192M";
+      serverProperties = {
+        server-port = 25567;
+      };
+    };
+  };
 
   virtualisation.oci-containers = {
     backend = "docker";
