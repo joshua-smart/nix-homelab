@@ -1,11 +1,4 @@
 {
-  nixConfig = {
-    extra-substituters = [ "https://nix-community.cachix.org" ];
-    extra-trusted-public-keys = [
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-    ];
-  };
-
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-24.05";
 
@@ -19,6 +12,11 @@
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-minecraft = {
+      url = "github:Infinidoge/nix-minecraft";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -28,7 +26,7 @@
       agenix,
       deploy-rs,
       ...
-    }:
+    }@inputs:
     let
       inherit (nixpkgs.lib) nixosSystem;
     in
@@ -41,7 +39,7 @@
             agenix.nixosModules.default
           ];
           specialArgs = {
-            host = "radovan";
+            inherit (inputs) nix-minecraft;
           };
         };
         falen = nixosSystem {
