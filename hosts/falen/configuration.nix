@@ -14,6 +14,10 @@
   profiles = {
     remote.enable = true;
     localisation.enable = true;
+    user = {
+      enable = true;
+      groups = [ "docker" ];
+    };
   };
 
   age.secrets."gandi-api-key.env".file = ../../secrets/gandi-api-key.env.age;
@@ -45,15 +49,4 @@
     vim
     helix
   ];
-
-  users = {
-    users.admin = {
-      isNormalUser = true;
-      extraGroups = [ "wheel" ];
-      openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOLqvqY/GcYXdRtZQThNOtSBl7xjPhEx8ZuzzwO9f7Cg js@desktop"
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM3PCmL6yPMIM3iV1CSoWmrAknwgFSEwQmGp6xBEs5NN js@laptop"
-      ];
-    };
-  };
 }

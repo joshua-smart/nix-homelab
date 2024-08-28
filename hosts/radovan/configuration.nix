@@ -15,6 +15,13 @@
   profiles = {
     localisation.enable = true;
     remote.enable = true;
+    user = {
+      enable = true;
+      groups = [
+        "docker"
+        "minecraft"
+      ];
+    };
   };
 
   networking.hostName = "radovan";
@@ -25,19 +32,6 @@
     extraGroups = [
       "wheel"
       "docker"
-    ];
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM3PCmL6yPMIM3iV1CSoWmrAknwgFSEwQmGp6xBEs5NN js@laptop"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOLqvqY/GcYXdRtZQThNOtSBl7xjPhEx8ZuzzwO9f7Cg js@desktop"
-    ];
-  };
-
-  users.users.admin = {
-    isNormalUser = true;
-    extraGroups = [
-      "wheel"
-      "docker"
-      "minecraft"
     ];
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM3PCmL6yPMIM3iV1CSoWmrAknwgFSEwQmGp6xBEs5NN js@laptop"
