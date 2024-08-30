@@ -17,13 +17,9 @@ in
       ];
       ports = [ "8080:80" ];
     };
-    services.nginx.enable = true;
-    services.nginx.virtualHosts."files.jsmart.dev" = {
-      enableACME = true;
-      forceSSL = true;
-      locations."/" = {
-        proxyPass = "http://127.0.0.1:8080";
-      };
+
+    services.nginx.proxyHosts."files.jsmart.dev" = {
+      port = 8080;
     };
   };
 }
