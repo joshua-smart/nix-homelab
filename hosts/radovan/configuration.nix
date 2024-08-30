@@ -32,6 +32,7 @@
     extraGroups = [
       "wheel"
       "docker"
+      "minecraft"
     ];
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM3PCmL6yPMIM3iV1CSoWmrAknwgFSEwQmGp6xBEs5NN js@laptop"
@@ -40,8 +41,15 @@
   };
 
   age.secrets."gandi-api-key.env".file = ../../secrets/gandi-api-key.env.age;
+  age.secrets."wireguard-private-key" = {
+    file = ../../secrets/wireguard-private-key.age;
+    owner = "root";
+    group = "systemd-network";
+    mode = "640";
+  };
 
   services = {
+    nginx.enable = true;
     paperless.enable = true;
     gandi-dynamic-dns = {
       enable = true;
@@ -51,7 +59,26 @@
       update-interval = "15m";
     };
     filebrowser.enable = true;
-    wireguard.enable = true;
+
+    wireguard = {
+      enable = true;
+      privateKeyFile = config.age.secrets."wireguard-private-key".path;
+      endpoint = "vpn.jsmart.dev";
+      port = 51820;
+      peers = [
+        {
+          # js@mobile
+          publicKey = "QT+jxxR0T7zLTluyZo4oA0Ons1mk1MMz1jELB0I7EAE=";
+          allowedIPs = [ "0.0.0.0/0" ];
+        }
+        {
+          # js@laptop
+          publicKey = "IemeN9jqe87pg8m4Gbym8siARlg2mvE0i2pI3Z6GDCs=";
+          allowedIPs = [ "0.0.0.0/0" ];
+        }
+      ];
+    };
+    adguardhome.enable = true;
   };
 
   services.minecraft-servers = {
