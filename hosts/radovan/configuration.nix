@@ -64,38 +64,7 @@
       package = pkgs.minecraftServers.paper-1_21;
       jvmOpts = "-Xms4096M -Xmx8192M";
       serverProperties = {
-        server-port = 25567;
-      };
-    };
-  };
-
-  virtualisation.oci-containers = {
-    backend = "docker";
-    containers = {
-      v5-minecraft = {
-        image = "itzg/minecraft-server";
-        ports = [ "25566:25565" ];
-        environment = {
-          EULA = "true";
-          MEMORY = "4G";
-          TYPE = "PAPER";
-          VERSION = "1.21";
-        };
-        volumes = [ "/home/js/containers/v5-minecraft:/data" ];
-      };
-
-      v5-minecraft-backup = {
-        image = "itzg/mc-backup";
-        environment = {
-          BACKUP_INTERVAL = "1d";
-          INITIAL_DELAY = "0";
-        };
-        volumes = [
-          "/home/js/containers/v5-minecraft:/data:ro"
-          "/home/js/containers/v5-minecraft-backups:/backups"
-        ];
-        dependsOn = [ "v5-minecraft" ];
-        extraOptions = [ "--network=container:v5-minecraft" ];
+        server-port = 25566;
       };
     };
   };
