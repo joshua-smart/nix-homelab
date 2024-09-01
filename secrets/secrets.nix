@@ -19,4 +19,6 @@ in
   ] ++ admins;
 
   "26t-network.env.age".publicKeys = [ falen ] ++ admins;
+
+  "restic-password.age".publicKeys = [ radovan ] ++ admins;
 }

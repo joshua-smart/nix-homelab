@@ -47,6 +47,7 @@
     group = "systemd-network";
     mode = "640";
   };
+  age.secrets."restic-password".file = ../../secrets/restic-password.age;
 
   services = {
     nginx.enable = true;
@@ -93,6 +94,20 @@
       serverProperties = {
         server-port = 25566;
       };
+    };
+  };
+
+  services.restic.backups = {
+    minecraft-server-season-5 = {
+      paths = [ "${config.services.minecraft-servers.dataDir}/season-5" ];
+      timerConfig = {
+        OnCalendar = "*-*-* 12:00:00";
+        Persistent = true;
+      };
+      initialize = true;
+      repository = "/bulk/backup";
+      passwordFile = config.age.secrets."restic-password".path;
+      pruneOpts = [ "--keep-last 5" ];
     };
   };
 }
