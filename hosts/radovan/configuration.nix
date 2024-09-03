@@ -17,28 +17,11 @@
     remote.enable = true;
     user = {
       enable = true;
-      groups = [
-        "docker"
-        "minecraft"
-      ];
+      groups = [ "minecraft" ];
     };
   };
 
   networking.hostName = "radovan";
-
-  users.users.js = {
-    isNormalUser = true;
-    description = "Joshua Smart";
-    extraGroups = [
-      "wheel"
-      "docker"
-      "minecraft"
-    ];
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM3PCmL6yPMIM3iV1CSoWmrAknwgFSEwQmGp6xBEs5NN js@laptop"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOLqvqY/GcYXdRtZQThNOtSBl7xjPhEx8ZuzzwO9f7Cg js@desktop"
-    ];
-  };
 
   age.secrets."gandi-api-key.env".file = ../../secrets/gandi-api-key.env.age;
   age.secrets."wireguard-private-key" = {
