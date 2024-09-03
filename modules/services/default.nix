@@ -9,5 +9,6 @@
     ./wireguard.nix
     ./filebrowser.nix
     ./adguardhome.nix
+    ./nextcloud.nix
   ];
 }

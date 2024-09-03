@@ -60,6 +60,7 @@
       update-interval = "15m";
     };
     filebrowser.enable = true;
+    nextcloud.enable = true;
 
     wireguard = {
       enable = true;

@@ -21,4 +21,6 @@ in
   "26t-network.env.age".publicKeys = [ falen ] ++ admins;
 
   "restic-password.age".publicKeys = [ radovan ] ++ admins;
+
+  "nextcloud-root-password.age".publicKeys = [ radovan ] ++ admins;
 }
