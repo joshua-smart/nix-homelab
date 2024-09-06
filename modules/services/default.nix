@@ -10,5 +10,6 @@
     ./filebrowser.nix
     ./adguardhome.nix
     ./nextcloud.nix
+    ./portfolio.nix
   ];
 }

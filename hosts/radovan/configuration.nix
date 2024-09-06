@@ -42,7 +42,6 @@
       key-file = config.age.secrets."gandi-api-key.env".path;
       update-interval = "15m";
     };
-    filebrowser.enable = true;
     nextcloud.enable = true;
 
     wireguard = {
@@ -54,16 +53,17 @@
         {
           # js@mobile
           publicKey = "QT+jxxR0T7zLTluyZo4oA0Ons1mk1MMz1jELB0I7EAE=";
-          allowedIPs = [ "0.0.0.0/0" ];
+          allowedIPs = [ "10.100.0.3/32" ];
         }
         {
           # js@laptop
-          publicKey = "IemeN9jqe87pg8m4Gbym8siARlg2mvE0i2pI3Z6GDCs=";
-          allowedIPs = [ "0.0.0.0/0" ];
+          publicKey = "bJpHqeuv49iVNj7jJPLdOIaUyNEHwr+IPZtbcRLyaDU=";
+          allowedIPs = [ "10.100.0.2/32" ];
         }
       ];
     };
     adguardhome.enable = true;
+    portfolio.enable = true;
   };
 
   services.minecraft-servers = {
