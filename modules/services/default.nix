@@ -7,7 +7,6 @@
     ./paperless.nix
     ./nginx.nix
     ./wireguard.nix
-    ./filebrowser.nix
     ./adguardhome.nix
     ./nextcloud.nix
     ./portfolio.nix
