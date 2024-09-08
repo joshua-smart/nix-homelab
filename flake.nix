@@ -29,6 +29,24 @@
     }@inputs:
     let
       inherit (nixpkgs.lib) nixosSystem;
+
+      deployLib =
+        system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+        in
+        (import nixpkgs {
+          inherit system;
+          overlays = [
+            deploy-rs.overlay
+            (self: super: {
+              deploy-rs = {
+                inherit (pkgs) deploy-rs;
+                lib = super.deploy-rs.lib;
+              };
+            })
+          ];
+        }).deploy-rs.lib;
     in
     {
       nixosConfigurations = {
@@ -57,7 +75,7 @@
           sshUser = "admin";
           profiles.system = {
             user = "root";
-            path = deploy-rs.lib."x86_64-linux".activate.nixos self.nixosConfigurations.radovan;
+            path = (deployLib "x86_64-linux").activate.nixos self.nixosConfigurations.radovan;
           };
         };
         falen = {
@@ -65,7 +83,7 @@
           sshUser = "admin";
           profiles.system = {
             user = "root";
-            path = deploy-rs.lib."aarch64-linux".activate.nixos self.nixosConfigurations.falen;
+            path = (deployLib "aarch64-linux").activate.nixos self.nixosConfigurations.falen;
           };
           remoteBuild = true;
         };
