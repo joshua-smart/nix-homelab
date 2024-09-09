@@ -61,19 +61,26 @@ in
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
 
-      virtualHosts = builtins.mapAttrs (
-        _:
-        { port, ssl }:
-        (
-          {
-            locations."/".proxyPass = "http://127.0.0.1:${toString port}";
-          }
-          // optionalAttrs ssl {
-            enableACME = true;
-            forceSSL = true;
-          }
-        )
-      ) cfg.proxyHosts;
+      virtualHosts =
+        {
+          fallback = {
+            default = true;
+            rejectSSL = true;
+          };
+        }
+        // builtins.mapAttrs (
+          _:
+          { port, ssl }:
+          (
+            {
+              locations."/".proxyPass = "http://127.0.0.1:${toString port}";
+            }
+            // optionalAttrs ssl {
+              enableACME = true;
+              forceSSL = true;
+            }
+          )
+        ) cfg.proxyHosts;
     };
   };
 }
