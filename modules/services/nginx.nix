@@ -24,6 +24,13 @@ in
               Whether to enable HTTPS support.
             '';
           };
+          websockets = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Whether to enable Websocket support.
+            '';
+          };
         };
       }
     );
@@ -70,10 +77,17 @@ in
         }
         // builtins.mapAttrs (
           _:
-          { port, ssl }:
+          {
+            port,
+            ssl,
+            websockets,
+          }:
           (
             {
-              locations."/".proxyPass = "http://127.0.0.1:${toString port}";
+              locations."/" = {
+                proxyPass = "http://127.0.0.1:${toString port}";
+                proxyWebsockets = websockets;
+              };
             }
             // optionalAttrs ssl {
               enableACME = true;

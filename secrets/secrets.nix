@@ -23,4 +23,6 @@ in
   "restic-password.age".publicKeys = [ radovan ] ++ admins;
 
   "nextcloud-root-password.age".publicKeys = [ radovan ] ++ admins;
+
+  "vaultwarden.env.age".publicKeys = [ radovan ] ++ admins;
 }
