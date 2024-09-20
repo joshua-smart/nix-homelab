@@ -25,4 +25,6 @@ in
   "nextcloud-root-password.age".publicKeys = [ radovan ] ++ admins;
 
   "vaultwarden.env.age".publicKeys = [ radovan ] ++ admins;
+
+  "homepage.env.age".publicKeys = [ radovan ] ++ admins;
 }

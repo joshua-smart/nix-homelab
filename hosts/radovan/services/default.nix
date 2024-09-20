@@ -7,5 +7,6 @@
     ./paperless.nix
     ./portfolio.nix
     ./nextcloud.nix
+    ./homepage-dashboard.nix
   ];
 }
