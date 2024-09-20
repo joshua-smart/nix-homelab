@@ -1,11 +1,15 @@
 { config, ... }:
 let
   cfg = config.services.vaultwarden;
+  backupDir = "/var/lib/bitwarden_rs/backup";
 in
 {
-  age.secrets."vaultwarden.env" = {
-    file = ../../../secrets/vaultwarden.env.age;
-    owner = "vaultwarden";
+  age.secrets = {
+    "vaultwarden.env" = {
+      file = ../../../secrets/vaultwarden.env.age;
+      owner = "vaultwarden";
+    };
+    "restic-password".file = ../../../secrets/restic-password.age;
   };
 
   services.vaultwarden = {
@@ -18,11 +22,25 @@ in
       ROCKET_ADDRESS = "127.0.0.1";
       ROCKET_PORT = 8222;
     };
-    backupDir = "/bulk/vaultwarden-backup";
+    inherit backupDir;
   };
 
   services.nginx.proxyHosts."bitwarden.jsmart.dev" = {
     port = cfg.config.ROCKET_PORT;
     websockets = true;
+  };
+
+  services.restic.backups = {
+    vaultwarden = {
+      paths = [ backupDir ];
+      timerConfig = {
+        OnCalendar = "monthly";
+        Persistent = true;
+      };
+      initialize = true;
+      repository = "/bulk/backups/vaultwarden";
+      passwordFile = config.age.secrets."restic-password".path;
+      pruneOpts = [ "--keep-last 3" ];
+    };
   };
 }

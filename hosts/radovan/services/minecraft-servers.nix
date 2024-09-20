@@ -35,7 +35,7 @@
         Persistent = true;
       };
       initialize = true;
-      repository = "/bulk/backup";
+      repository = "/bulk/backups/minecraft-server-season-5";
       passwordFile = config.age.secrets."restic-password".path;
       pruneOpts = [ "--keep-last 5" ];
     };

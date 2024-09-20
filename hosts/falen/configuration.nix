@@ -14,10 +14,7 @@
   profiles = {
     remote.enable = true;
     localisation.enable = true;
-    user = {
-      enable = true;
-      groups = [ "docker" ];
-    };
+    user.enable = true;
   };
 
   age.secrets."gandi-api-key.env".file = ../../secrets/gandi-api-key.env.age;
@@ -44,9 +41,4 @@
       interfaces = [ "wlp1s0u1u1" ];
     };
   };
-
-  environment.systemPackages = with pkgs; [
-    vim
-    helix
-  ];
 }
