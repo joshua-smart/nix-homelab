@@ -26,6 +26,6 @@
       key-file = config.age.secrets."gandi-api-key.env".path;
       update-interval = "15m";
     };
-    adguardhome.enable = true;
+    # adguardhome.enable = true;
   };
 }

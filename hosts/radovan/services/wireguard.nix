@@ -8,7 +8,7 @@
   };
 
   services.wireguard = {
-    enable = true;
+    enable = false;
     privateKeyFile = config.age.secrets."wireguard-private-key".path;
     endpoint = "vpn.jsmart.dev";
     port = 51820;

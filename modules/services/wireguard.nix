@@ -19,12 +19,10 @@ let
   };
 
   wireguardPeers = builtins.map (peer: {
-    wireguardPeerConfig = {
-      PublicKey = peer.publicKey;
-      AllowedIPs = peer.allowedIPs;
-      Endpoint = "${cfg.endpoint}:${builtins.toString cfg.port}";
-      PersistentKeepalive = 15;
-    };
+    PublicKey = peer.publicKey;
+    AllowedIPs = peer.allowedIPs;
+    Endpoint = "${cfg.endpoint}:${builtins.toString cfg.port}";
+    PersistentKeepalive = 15;
   }) cfg.peers;
 in
 {
@@ -77,7 +75,7 @@ in
         address = [ "10.100.0.1/24" ];
         networkConfig = {
           IPMasquerade = "ipv4";
-          IPForward = true;
+          IPv4Forwarding = true;
         };
       };
     };

@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
   age.secrets."nextcloud-root-password" = {
     file = ../../../secrets/nextcloud-root-password.age;
@@ -11,6 +11,7 @@
     hostName = "files.jsmart.dev";
     config.adminpassFile = config.age.secrets."nextcloud-root-password".path;
     https = true;
+    package = pkgs.nextcloud30;
   };
 
   services.nginx.virtualHosts.${config.services.nextcloud.hostName} = {

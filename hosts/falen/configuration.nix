@@ -20,6 +20,7 @@
   age.secrets."gandi-api-key.env".file = ../../secrets/gandi-api-key.env.age;
 
   services = {
+    nginx.enable = true;
     gandi-dynamic-dns = {
       enable = true;
       domain = "jsmart.dev";
@@ -27,7 +28,6 @@
       key-file = config.age.secrets."gandi-api-key.env".path;
       update-interval = "15m";
     };
-    adguardhome.enable = true;
   };
 
   age.secrets."26t-network.env".file = ../../secrets/26t-network.env.age;
@@ -36,8 +36,8 @@
     hostName = "falen";
     wireless = {
       enable = true;
-      environmentFile = config.age.secrets."26t-network.env".path;
-      networks."26t".psk = "@PSK_26T@";
+      secretsFile = config.age.secrets."26t-network.env".path;
+      networks."26t".psk = "ext:PSK_26T";
       interfaces = [ "wlp1s0u1u1" ];
     };
   };

@@ -46,6 +46,7 @@ in
         ssl = false;
       };
     };
+    default = { };
   };
 
   config = mkIf cfg.enable {

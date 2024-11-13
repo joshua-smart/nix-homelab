@@ -1,7 +1,7 @@
 { config, ... }:
 let
   cfg = config.services.vaultwarden;
-  backupDir = "/var/lib/bitwarden_rs/backup";
+  backupDir = "/tmp/vaultwarden-backup";
 in
 {
   age.secrets = {
