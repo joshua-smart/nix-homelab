@@ -8,5 +8,6 @@
     ./portfolio.nix
     ./nextcloud.nix
     ./homepage-dashboard.nix
+    ./syncthing.nix
   ];
 }
