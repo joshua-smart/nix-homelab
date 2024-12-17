@@ -27,5 +27,12 @@
       update-interval = "15m";
     };
     # adguardhome.enable = true;
+
+    terraria = {
+      enable = true;
+      openFirewall = true;
+      secure = true;
+      messageOfTheDay = "26t";
+    };
   };
 }

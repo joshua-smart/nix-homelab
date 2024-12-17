@@ -30,6 +30,13 @@
     let
       inherit (nixpkgs.lib) nixosSystem;
 
+      system-pkgs =
+        system:
+        import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
+
       deployLib =
         system:
         let
@@ -50,8 +57,9 @@
     in
     {
       nixosConfigurations = {
-        radovan = nixosSystem {
+        radovan = nixosSystem rec {
           system = "x86_64-linux";
+          pkgs = system-pkgs system;
           modules = [
             ./hosts/radovan/configuration.nix
             agenix.nixosModules.default
@@ -60,8 +68,9 @@
             inherit (inputs) nix-minecraft;
           };
         };
-        falen = nixosSystem {
+        falen = nixosSystem rec {
           system = "aarch64-linux";
+          pkgs = system-pkgs system;
           modules = [
             ./hosts/falen/configuration.nix
             agenix.nixosModules.default
