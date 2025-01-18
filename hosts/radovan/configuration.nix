@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -9,7 +9,10 @@
   profiles = {
     localisation.enable = true;
     remote.enable = true;
-    user.enable = true;
+    user = {
+      enable = true;
+      groups = [ "terraria" ];
+    };
   };
 
   networking.hostName = "radovan";
@@ -26,13 +29,13 @@
       key-file = config.age.secrets."gandi-api-key.env".path;
       update-interval = "15m";
     };
-    # adguardhome.enable = true;
-
     terraria = {
       enable = true;
       openFirewall = true;
-      secure = true;
+      secure = false;
       messageOfTheDay = "26t";
     };
   };
+
+  environment.systemPackages = with pkgs; [ tmux ];
 }

@@ -1,13 +1,9 @@
 {
   config,
   pkgs,
-  nix-minecraft,
   ...
 }:
 {
-  imports = [ nix-minecraft.nixosModules.minecraft-servers ];
-  nixpkgs.overlays = [ nix-minecraft.overlay ];
-
   profiles.user.groups = [ "minecraft" ];
 
   age.secrets."restic-password".file = ../../../secrets/restic-password.age;
@@ -17,12 +13,24 @@
     eula = true;
     openFirewall = true;
 
-    servers.season-5 = {
-      enable = true;
-      package = pkgs.minecraftServers.paper-1_21;
-      jvmOpts = "-Xms4096M -Xmx8192M";
-      serverProperties = {
-        server-port = 25566;
+    servers = {
+      season-5 = {
+        enable = true;
+        package = pkgs.minecraftServers.paper-1_21;
+        jvmOpts = "-Xms4096M -Xmx8192M";
+        serverProperties = {
+          server-port = 25566;
+        };
+      };
+      hardcore-26t = {
+        enable = true;
+        package = pkgs.minecraftServers.paper-1_21_4;
+        jvmOpts = "-Xms4096M -Xmx8192M";
+        serverProperties = {
+          difficulty = 3;
+          server-port = 25567;
+          hardcore = true;
+        };
       };
     };
   };

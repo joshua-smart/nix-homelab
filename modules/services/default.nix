@@ -7,5 +7,6 @@
     ./nginx.nix
     ./wireguard.nix
     ./adguardhome.nix
+    ./minecraft-servers.nix
   ];
 }

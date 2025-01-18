@@ -35,6 +35,7 @@
         import nixpkgs {
           inherit system;
           config.allowUnfree = true;
+          overlays = [ inputs.nix-minecraft.overlay ];
         };
 
       deployLib =
@@ -64,9 +65,7 @@
             ./hosts/radovan/configuration.nix
             agenix.nixosModules.default
           ];
-          specialArgs = {
-            inherit (inputs) nix-minecraft;
-          };
+          specialArgs = { inherit inputs; };
         };
         falen = nixosSystem rec {
           system = "aarch64-linux";
@@ -75,6 +74,7 @@
             ./hosts/falen/configuration.nix
             agenix.nixosModules.default
           ];
+          specialArgs = { inherit inputs; };
         };
       };
 
@@ -107,5 +107,13 @@
           };
         }
       ) deploy-rs.lib;
+
+      devShells."x86_64-linux".default =
+        let
+          pkgs = system-pkgs "x86_64-linux";
+        in
+        pkgs.mkShell {
+          packages = [ pkgs.deploy-rs ];
+        };
     };
 }
