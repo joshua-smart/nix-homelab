@@ -9,7 +9,10 @@
   services.nextcloud = {
     enable = true;
     hostName = "files.jsmart.dev";
-    config.adminpassFile = config.age.secrets."nextcloud-root-password".path;
+    config = {
+      dbtype = "sqlite";
+      adminpassFile = config.age.secrets."nextcloud-root-password".path;
+    };
     https = true;
     package = pkgs.nextcloud30;
   };
