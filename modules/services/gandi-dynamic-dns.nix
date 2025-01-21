@@ -122,16 +122,5 @@ in
         Unit = "gandi-ddns.service";
       };
     };
-    # virtualisation.oci-containers.containers = {
-    #   gandi-dynamic-dns = {
-    #     image = "adamvig/gandi-dynamic-dns";
-    #     environment = {
-    #       DOMAIN = cfg.domain;
-    #       RECORD_NAME = cfg.record-name;
-    #       UPDATE_INTERVAL = cfg.update-interval;
-    #     };
-    #     environmentFiles = [ cfg.key-file ];
-    #   };
-    # };
   };
 }
