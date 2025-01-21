@@ -29,4 +29,6 @@ in
   "vaultwarden.env.age".publicKeys = [ radovan ] ++ admins;
 
   "homepage.env.age".publicKeys = [ radovan ] ++ admins;
+
+  "velocity-forwarding.secret.age".publicKeys = [ radovan ] ++ admins;
 }

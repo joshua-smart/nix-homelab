@@ -2,7 +2,7 @@
 {
   imports = [
     ./actual.nix
-    ./minecraft-servers.nix
+    ./minecraft-servers
     ./wireguard.nix
     ./vaultwarden.nix
     ./paperless.nix
