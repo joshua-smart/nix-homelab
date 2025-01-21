@@ -25,7 +25,11 @@
     gandi-dynamic-dns = {
       enable = true;
       domain = "jsmart.dev";
-      record-name = "@";
+      record-names = [
+        "radovan.hosts"
+        "*"
+        "@"
+      ];
       key-file = config.age.secrets."gandi-api-key.env".path;
       update-interval = "15m";
     };

@@ -18,6 +18,8 @@ in
     falen
   ] ++ admins;
 
+  "gandi-pat-nixos-wildcard-certificate.env.age".publicKeys = [ radovan ] ++ admins;
+
   "26t-network.env.age".publicKeys = [ falen ] ++ admins;
 
   "restic-password.age".publicKeys = [ radovan ] ++ admins;

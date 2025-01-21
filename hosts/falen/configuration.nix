@@ -24,7 +24,7 @@
     gandi-dynamic-dns = {
       enable = true;
       domain = "jsmart.dev";
-      record-name = "falen.hosts";
+      record-names = [ "falen.hosts" ];
       key-file = config.age.secrets."gandi-api-key.env".path;
       update-interval = "15m";
     };

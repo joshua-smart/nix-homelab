@@ -7,49 +7,54 @@ let
     optionalAttrs
     ;
   cfg = config.services.nginx;
-in
-{
-  options.services.nginx.proxyHosts = mkOption {
-    type = types.attrsOf (
-      types.submodule {
-        options = {
-          port = mkOption {
-            type = types.port;
-            example = 8080;
-          };
-          ssl = mkOption {
-            type = types.bool;
-            default = true;
-            description = ''
-              Whether to enable HTTPS support.
-            '';
-          };
-          websockets = mkOption {
-            type = types.bool;
-            default = false;
-            description = ''
-              Whether to enable Websocket support.
-            '';
-          };
-        };
-      }
-    );
-    description = ''
-      List of hosts to proxy.
-    '';
-    example = {
-      "example.com" = {
-        port = 8080;
+
+  proxyHostOption = types.submodule {
+    options = {
+      port = mkOption {
+        type = types.port;
+        example = 8080;
       };
-      "subdomain.example.com" = {
-        port = 3000;
-        ssl = false;
+      ssl = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable HTTPS support.
+        '';
+      };
+      websockets = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to enable Websocket support.
+        '';
       };
     };
-    default = { };
+  };
+in
+{
+  options.services.nginx = {
+    proxyHosts = mkOption {
+      type = types.attrsOf proxyHostOption;
+      description = ''
+        List of hosts to proxy.
+      '';
+      example = {
+        "example.com" = {
+          port = 8080;
+        };
+        "subdomain.example.com" = {
+          port = 3000;
+          ssl = false;
+        };
+      };
+      default = { };
+    };
   };
 
   config = mkIf cfg.enable {
+
+    age.secrets."gandi-pat-nixos-wildcard-certificate.env".file =
+      ../../secrets/gandi-pat-nixos-wildcard-certificate.env.age;
 
     networking.firewall = {
       allowedTCPPorts = [
@@ -59,9 +64,18 @@ in
     };
 
     security.acme = {
-      defaults.email = "josh@thesmarts.co.uk";
       acceptTerms = true;
+      defaults.email = "josh@thesmarts.co.uk";
+
+      certs."jsmart.dev" = {
+        domain = "jsmart.dev";
+        extraDomainNames = [ "*.jsmart.dev" ];
+        dnsProvider = "gandiv5";
+        dnsPropagationCheck = true;
+        environmentFile = config.age.secrets."gandi-pat-nixos-wildcard-certificate.env".path;
+      };
     };
+    users.users.nginx.extraGroups = [ "acme" ];
 
     services.nginx = {
       recommendedGzipSettings = true;
@@ -91,7 +105,7 @@ in
               };
             }
             // optionalAttrs ssl {
-              enableACME = true;
+              useACMEHost = "jsmart.dev";
               forceSSL = true;
             }
           )
