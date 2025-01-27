@@ -17,11 +17,6 @@
       url = "github:Infinidoge/nix-minecraft";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nix-velocity = {
-      url = "github:joshua-smart/nix-velocity";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
