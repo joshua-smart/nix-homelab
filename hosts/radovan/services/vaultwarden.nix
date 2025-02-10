@@ -42,5 +42,14 @@ in
       passwordFile = config.age.secrets."restic-password".path;
       pruneOpts = [ "--keep-last 3" ];
     };
+    # vaultwarden-falen = {
+    #   paths = [ backupDir ];
+    #   timerConfig = {
+    #     OnCalendar = "monthly";
+    #     Persistent = true;
+    #   };
+    #   initialize = true;
+    #   repository = "";
+    # };
   };
 }

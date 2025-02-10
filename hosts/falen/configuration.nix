@@ -1,8 +1,9 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 {
   imports = [
     ./hardware-configuration.nix
     ../../modules
+    ./services
   ];
 
   # Free up to 1GiB whenever there is less than 100MiB left.
@@ -20,7 +21,6 @@
   age.secrets."gandi-api-key.env".file = ../../secrets/gandi-api-key.env.age;
 
   services = {
-    nginx.enable = true;
     gandi-dynamic-dns = {
       enable = true;
       domain = "jsmart.dev";

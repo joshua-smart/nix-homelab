@@ -1,9 +1,28 @@
 {
   config,
   pkgs,
-  inputs,
+  lib,
   ...
 }:
+let
+  withVelocity = lib.recursiveUpdate {
+    serverProperties = {
+      online-mode = false;
+    };
+    files."config/paper-global.yml".value = {
+      proxies.velocity = {
+        enabled = true;
+        online-mode = true;
+        secret = "<MARKER>";
+      };
+    };
+    extraStartPre = # bash
+      ''
+        SECRET=$(cat ${config.age.secrets."velocity-forwarding.secret".path})
+        sed -e "s/<MARKER>/$SECRET/g" -i config/paper-global.yml
+      '';
+  };
+in
 {
   profiles.user.groups = [
     "minecraft"
@@ -24,16 +43,16 @@
     openFirewall = false;
 
     servers = {
-      season-5 = {
+      season-5 = withVelocity {
         enable = false;
         package = pkgs.minecraftServers.paper-1_21;
         jvmOpts = "-Xms4096M -Xmx8192M";
         serverProperties = {
           server-port = 25566;
-          online-mode = false;
         };
       };
-      hardcore-26t = {
+
+      hardcore-26t = withVelocity {
         enable = false;
         package = pkgs.minecraftServers.paper-1_21_4;
         jvmOpts = "-Xms4096M -Xmx8192M";
@@ -41,11 +60,11 @@
           difficulty = 3;
           server-port = 25567;
           hardcore = true;
-          online-mode = false;
         };
       };
+
       prominence-ii = {
-        enable = true;
+        enable = false;
         package = pkgs.minecraftServers.fabric-1_20_1;
         jvmOpts = "-Xms4096M -Xmx8192M";
         serverProperties = {
@@ -53,14 +72,18 @@
         };
         openFirewall = true;
       };
+
       velocity = {
         enable = true;
         package = pkgs.velocityServers.velocity;
+        stopCommand = # bash
+          ''end'';
         symlinks."velocity.toml".value = {
           config-version = "2.7";
           bind = "0.0.0.0:25565";
           player-info-forwarding-mode = "modern";
           ping-passthrough = "all";
+          online-mode = true;
           forwarding-secret-file = config.age.secrets."velocity-forwarding.secret".path;
 
           servers = {
@@ -78,19 +101,22 @@
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ 25565 ];
+  networking.firewall.allowedTCPPorts = [
+    25565
+    25570
+  ];
 
   services.restic.backups = {
-    minecraft-server-season-5 = {
-      paths = [ "${config.services.minecraft-servers.dataDir}/season-5" ];
-      timerConfig = {
-        OnCalendar = "*-*-* 12:00:00";
-        Persistent = true;
-      };
-      initialize = true;
-      repository = "/bulk/backups/minecraft-server-season-5";
-      passwordFile = config.age.secrets."restic-password".path;
-      pruneOpts = [ "--keep-last 5" ];
-    };
+    # minecraft-server-season-5 = {
+    #   paths = [ "${config.services.minecraft-servers.dataDir}/season-5" ];
+    #   timerConfig = {
+    #     OnCalendar = "*-*-* 12:00:00";
+    #     Persistent = true;
+    #   };
+    #   initialize = true;
+    #   repository = "/bulk/backups/minecraft-server-season-5";
+    #   passwordFile = config.age.secrets."restic-password".path;
+    #   pruneOpts = [ "--keep-last 5" ];
+    # };
   };
 }
