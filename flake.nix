@@ -28,28 +28,34 @@
       ...
     }@inputs:
     let
-      inherit (nixpkgs.lib) nixosSystem;
+      inherit (nixpkgs.lib) nixosSystem filesystem;
 
       system-pkgs =
         system:
         import nixpkgs {
           inherit system;
           config.allowUnfree = true;
-          overlays = [ inputs.nix-minecraft.overlay ];
+          overlays = [
+            inputs.nix-minecraft.overlay
+            (
+              final: prev:
+              filesystem.packagesFromDirectoryRecursive {
+                callPackage = final.callPackage;
+                directory = ./pkgs;
+              }
+            )
+          ];
         };
 
       deployLib =
         system:
-        let
-          pkgs = import nixpkgs { inherit system; };
-        in
         (import nixpkgs {
           inherit system;
           overlays = [
             deploy-rs.overlay
             (self: super: {
               deploy-rs = {
-                inherit (pkgs) deploy-rs;
+                inherit (system-pkgs system) deploy-rs;
                 lib = super.deploy-rs.lib;
               };
             })
@@ -113,7 +119,10 @@
           pkgs = system-pkgs "x86_64-linux";
         in
         pkgs.mkShell {
-          packages = [ pkgs.deploy-rs ];
+          packages = [
+            pkgs.deploy-rs
+            agenix.packages."x86_64-linux".agenix
+          ];
         };
     };
 }

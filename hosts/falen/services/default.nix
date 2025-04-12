@@ -1,4 +1,0 @@
-{ ... }:
-{
-  imports = [ ./restic.nix ];
-}

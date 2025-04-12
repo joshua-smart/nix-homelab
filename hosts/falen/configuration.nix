@@ -3,7 +3,6 @@
   imports = [
     ./hardware-configuration.nix
     ../../modules
-    ./services
   ];
 
   # Free up to 1GiB whenever there is less than 100MiB left.
@@ -16,18 +15,6 @@
     remote.enable = true;
     localisation.enable = true;
     user.enable = true;
-  };
-
-  age.secrets."gandi-api-key.env".file = ../../secrets/gandi-api-key.env.age;
-
-  services = {
-    gandi-dynamic-dns = {
-      enable = true;
-      domain = "jsmart.dev";
-      record-names = [ "falen.hosts" ];
-      key-file = config.age.secrets."gandi-api-key.env".path;
-      update-interval = "15m";
-    };
   };
 
   age.secrets."26t-network.env".file = ../../secrets/26t-network.env.age;

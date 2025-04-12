@@ -1,9 +1,9 @@
-{ ... }:
+{ lib, ... }:
+let
+  inherit (lib) filesystem;
+in
 {
-  imports = [
-    ./profiles
-    ./services
-  ];
+  imports = (filesystem.listFilesRecursive ./profiles) ++ (filesystem.listFilesRecursive ./services);
 
   system.stateVersion = "24.05";
   nix.settings.experimental-features = [

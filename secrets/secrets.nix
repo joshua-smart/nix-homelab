@@ -13,13 +13,6 @@ in
 {
   "wireguard-private-key.age".publicKeys = [ radovan ] ++ admins;
 
-  "gandi-api-key.env.age".publicKeys = [
-    radovan
-    falen
-  ] ++ admins;
-
-  "gandi-pat-nixos-wildcard-certificate.env.age".publicKeys = [ radovan ] ++ admins;
-
   "26t-network.env.age".publicKeys = [ falen ] ++ admins;
 
   "restic-password.age".publicKeys = [ radovan ] ++ admins;
@@ -28,7 +21,7 @@ in
 
   "vaultwarden.env.age".publicKeys = [ radovan ] ++ admins;
 
-  "homepage.env.age".publicKeys = [ radovan ] ++ admins;
-
   "velocity-forwarding.secret.age".publicKeys = [ radovan ] ++ admins;
+
+  "cloudflare-ddns-token.age".publicKeys = [ radovan ] ++ admins;
 }

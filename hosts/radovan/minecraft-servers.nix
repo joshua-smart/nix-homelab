@@ -29,9 +29,9 @@ in
   ];
 
   age.secrets = {
-    "restic-password".file = ../../../../secrets/restic-password.age;
+    "restic-password".file = ../../secrets/restic-password.age;
     "velocity-forwarding.secret" = {
-      file = ../../../../secrets/velocity-forwarding.secret.age;
+      file = ../../secrets/velocity-forwarding.secret.age;
       owner = "minecraft";
       group = "minecraft";
     };
@@ -73,8 +73,19 @@ in
         openFirewall = true;
       };
 
+      "26t" = withVelocity {
+        enable = false;
+        package = pkgs.minecraftServers.paper-1_21_4;
+        jvmOpts = "-Xms4096M -Xmx4096M";
+        serverProperties = {
+          server-port = 25569;
+          motd = "Ben go to bed!";
+          level-seed = "1412583731547517931";
+        };
+      };
+
       velocity = {
-        enable = true;
+        enable = false;
         package = pkgs.velocityServers.velocity;
         stopCommand = # bash
           ''end'';
@@ -90,9 +101,11 @@ in
             lobby = "127.0.0.1:25568";
             season-5 = "127.0.0.1:25566";
             hardcore-26t = "127.0.0.1:25567";
+            "26t" = "127.0.0.1:25569";
           };
 
           forced-hosts = {
+            "26t.minecraft.jsmart.dev" = [ "26t" ];
             "season5.minecraft.jsmart.dev" = [ "season-5" ];
             "hardcore26t.minecraft.jsmart.dev" = [ "hardcore-26t" ];
           };

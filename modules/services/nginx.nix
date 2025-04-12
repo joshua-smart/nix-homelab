@@ -53,8 +53,7 @@ in
 
   config = mkIf cfg.enable {
 
-    age.secrets."gandi-pat-nixos-wildcard-certificate.env".file =
-      ../../secrets/gandi-pat-nixos-wildcard-certificate.env.age;
+    age.secrets."cloudflare-ddns-token".file = ../../secrets/cloudflare-ddns-token.age;
 
     networking.firewall = {
       allowedTCPPorts = [
@@ -70,9 +69,9 @@ in
       certs."jsmart.dev" = {
         domain = "jsmart.dev";
         extraDomainNames = [ "*.jsmart.dev" ];
-        dnsProvider = "gandiv5";
+        dnsProvider = "cloudflare";
         dnsPropagationCheck = true;
-        environmentFile = config.age.secrets."gandi-pat-nixos-wildcard-certificate.env".path;
+        credentialFiles.CLOUDFLARE_DNS_API_TOKEN_FILE = config.age.secrets."cloudflare-ddns-token".path;
       };
     };
     users.users.nginx.extraGroups = [ "acme" ];
