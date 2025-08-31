@@ -17,6 +17,8 @@
       url = "github:Infinidoge/nix-minecraft";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nixos-hardware.url = "github:NixOS/nixos-hardware";
   };
 
   outputs =
@@ -25,9 +27,16 @@
       nixpkgs,
       agenix,
       deploy-rs,
+      nixos-hardware,
       ...
     }@inputs:
     let
+      authorizedKeys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOLqvqY/GcYXdRtZQThNOtSBl7xjPhEx8ZuzzwO9f7Cg js@desktop"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM3PCmL6yPMIM3iV1CSoWmrAknwgFSEwQmGp6xBEs5NN js@laptop"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK97cNMS1YQ08Q3Lam4RRzs0aQ4Lp1v+eoJGAKhRArFg"
+      ];
+
       inherit (nixpkgs.lib) nixosSystem filesystem;
 
       system-pkgs =
@@ -37,13 +46,12 @@
           config.allowUnfree = true;
           overlays = [
             inputs.nix-minecraft.overlay
-            (
-              final: prev:
-              filesystem.packagesFromDirectoryRecursive {
+            (final: prev: {
+              myPackages = filesystem.packagesFromDirectoryRecursive {
                 callPackage = final.callPackage;
                 directory = ./pkgs;
-              }
-            )
+              };
+            })
           ];
         };
 
@@ -52,7 +60,7 @@
         (import nixpkgs {
           inherit system;
           overlays = [
-            deploy-rs.overlay
+            deploy-rs.overlays.default
             (self: super: {
               deploy-rs = {
                 inherit (system-pkgs system) deploy-rs;
@@ -68,19 +76,22 @@
           system = "x86_64-linux";
           pkgs = system-pkgs system;
           modules = [
+            ./modules
             ./hosts/radovan/configuration.nix
             agenix.nixosModules.default
           ];
-          specialArgs = { inherit inputs; };
+          specialArgs = { inherit inputs authorizedKeys; };
         };
         falen = nixosSystem rec {
           system = "aarch64-linux";
           pkgs = system-pkgs system;
           modules = [
+            ./modules
             ./hosts/falen/configuration.nix
             agenix.nixosModules.default
+            nixos-hardware.nixosModules.raspberry-pi-4
           ];
-          specialArgs = { inherit inputs; };
+          specialArgs = { inherit inputs authorizedKeys; };
         };
       };
 
@@ -94,13 +105,12 @@
           };
         };
         falen = {
-          hostname = "falen.hosts.jsmart.dev";
+          hostname = "192.168.1.2";
           sshUser = "admin";
           profiles.system = {
             user = "root";
             path = (deployLib "aarch64-linux").activate.nixos self.nixosConfigurations.falen;
           };
-          remoteBuild = true;
         };
       };
 

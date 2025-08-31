@@ -8,20 +8,22 @@ let
   ];
 
   radovan = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID5Ibd1yonZVXAgjmY50a9OHYLbKWKLKrLjFl/Bbw8eP";
-  falen = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGkC1u+4buld3EErSn4hx9T0F5ldkhUhpM/RNMYRLjzh";
+  falen = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPn618NF7nhtOVyTu8jrY9frIBFlUKkoG6XEGubHLRjG";
 in
-{
-  "wireguard-private-key.age".publicKeys = [ radovan ] ++ admins;
-
-  "26t-network.env.age".publicKeys = [ falen ] ++ admins;
-
-  "restic-password.age".publicKeys = [ radovan ] ++ admins;
-
-  "nextcloud-root-password.age".publicKeys = [ radovan ] ++ admins;
-
-  "vaultwarden.env.age".publicKeys = [ radovan ] ++ admins;
-
-  "velocity-forwarding.secret.age".publicKeys = [ radovan ] ++ admins;
-
-  "cloudflare-ddns-token.age".publicKeys = [ radovan ] ++ admins;
+builtins.mapAttrs (key: hosts: { publicKeys = hosts ++ admins; }) {
+  "wireguard-private-key.age" = [ radovan ];
+  "26t-network.env.age" = [ falen ];
+  "restic-password.age" = [ radovan ];
+  "nextcloud-root-password.age" = [ radovan ];
+  "vaultwarden.env.age" = [ radovan ];
+  "velocity-forwarding.secret.age" = [ radovan ];
+  "cloudflare-ddns-token.age" = [
+    radovan
+    falen
+  ];
+  "radovan-root-hashed-password.age" = [ radovan ];
+  "radovan-admin-hashed-password.age" = [ radovan ];
+  "radovan-headscale-auth-key.age" = [ radovan ];
+  "falen-headscale-auth-key.age" = [ falen ];
+  "ntfy-admin-password.age" = [ radovan ];
 }

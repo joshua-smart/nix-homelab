@@ -28,6 +28,13 @@ let
           Whether to enable Websocket support.
         '';
       };
+      tailscale = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to restrict this server to tailscale clients only.
+        '';
+      };
     };
   };
 in
@@ -48,6 +55,9 @@ in
         };
       };
       default = { };
+    };
+    tailscaleAddresses = mkOption {
+      type = types.listOf types.str;
     };
   };
 
@@ -95,6 +105,7 @@ in
             port,
             ssl,
             websockets,
+            tailscale,
           }:
           (
             {
@@ -106,6 +117,9 @@ in
             // optionalAttrs ssl {
               useACMEHost = "jsmart.dev";
               forceSSL = true;
+            }
+            // optionalAttrs tailscale {
+              listenAddresses = cfg.tailscaleAddresses;
             }
           )
         ) cfg.proxyHosts;

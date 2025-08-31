@@ -3,7 +3,7 @@ let
   inherit (lib) filesystem;
 in
 {
-  imports = (filesystem.listFilesRecursive ./profiles) ++ (filesystem.listFilesRecursive ./services);
+  imports = filesystem.listFilesRecursive ./services;
 
   system.stateVersion = "24.05";
   nix.settings.experimental-features = [

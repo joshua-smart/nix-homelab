@@ -1,1 +1,15 @@
+- 3-2-1 backups
+  1. [x] local backup to radovan 
+  2. [ ] offsite backup to falen (restic host?)
 
+- falen as offsite backup solution
+  - [ ] ddns
+  - [ ] restic server
+  - [ ] hardware
+
+- VPN
+  - [x] headscale
+  - [x] tailscale
+  - VPN protected services
+
+- investigate prometheus monitoring
