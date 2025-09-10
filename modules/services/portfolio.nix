@@ -54,6 +54,7 @@ in
         Restart = "always";
       };
       after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
     };
   };
 }
