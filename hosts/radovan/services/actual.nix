@@ -15,7 +15,7 @@
     openFirewall = false;
   };
 
-  age.secrets."actual/restic-password".file = ../../../secrets/restic-password.age;
+  sops.secrets."restic/repository_password" = { };
   services.restic.backups =
     lib.mapAttrs
       (
@@ -31,7 +31,7 @@
           dynamicFilesFrom = /* bash */ ''
             readlink -f ${config.services.actual.settings.dataDir}
           '';
-          passwordFile = config.age.secrets."actual/restic-password".path;
+          passwordFile = config.sops.secrets."restic/repository_password".path;
           initialize = true;
           timerConfig = {
             Persistent = true;

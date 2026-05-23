@@ -5,8 +5,7 @@
     forceSSL = true;
   };
 
-  age.secrets."nextcloud-root-password" = {
-    file = ../../../secrets/nextcloud-root-password.age;
+  sops.secrets."nextcloud/root_password" = {
     owner = "nextcloud";
     group = "nextcloud";
   };
@@ -15,7 +14,7 @@
     hostName = "files.jsmart.dev";
     config = {
       dbtype = "sqlite";
-      adminpassFile = config.age.secrets."nextcloud-root-password".path;
+      adminpassFile = config.sops.secrets."nextcloud/root_password".path;
     };
     https = true;
     package = pkgs.nextcloud33;

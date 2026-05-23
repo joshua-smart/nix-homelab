@@ -10,11 +10,9 @@
     ./hardware-configuration.nix
   ];
 
-  age.secrets = {
-    "restic-password".file = ../../secrets/restic-password.age;
-  };
-
   networking.hostName = "radovan";
+
+  sops.defaultSopsFile = ./secrets.yaml;
 
   # services.nginx = {
   #   tailscaleAddresses = [
@@ -35,11 +33,12 @@
   services.jellyfin.enable = true;
   users.users.admin.extraGroups = [ "jellyfin" ];
 
+  sops.secrets."headscale/auth_key" = { };
   services.tailscale = {
     enable = true;
     useRoutingFeatures = "server";
     extraUpFlags = [ "--webclient" ];
-    authKeyFile = config.age.secrets."headscale-auth-key".path;
+    authKeyFile = config.sops.secrets."headscale/auth_key".path;
   };
 
   services.stirling-pdf = {
@@ -48,36 +47,6 @@
       SERVER_PORT = 8088;
     };
   };
-
-  # services = {
-  #   restic.backups = {
-  #     paperless =
-  #       let
-  #         tmpdir = "/tmp/paperless-backup";
-  #       in
-  #       {
-  #         backupPrepareCommand = # bash
-  #           ''
-  #             mkdir -p ${tmpdir}
-  #             ${config.services.paperless.dataDir}/paperless-manage \
-  #               document_exporter ${tmpdir} -d
-  #           '';
-  #         backupCleanupCommand = # bash
-  #           ''
-  #             rm -r ${tmpdir}
-  #           '';
-  #         paths = [ tmpdir ];
-  #         timerConfig = {
-  #           OnCalendar = "monthly";
-  #           Persistent = true;
-  #         };
-  #         initialize = true;
-  #         repository = "/bulk/backups/paperless";
-  #         passwordFile = config.age.secrets."restic-password".path;
-  #         pruneOpts = [ "--keep-last 3" ];
-  #       };
-  #   };
-  # };
 
   environment.systemPackages = with pkgs; [
     tmux

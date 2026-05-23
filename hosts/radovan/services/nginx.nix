@@ -52,7 +52,7 @@ in
 
   config = {
 
-    age.secrets."cloudflare-ddns-token".file = ../../../secrets/cloudflare-ddns-token.age;
+    sops.secrets."cloudflare/ddns_token" = { };
 
     networking.firewall = {
       allowedTCPPorts = [
@@ -70,7 +70,7 @@ in
         extraDomainNames = [ "*.jsmart.dev" ];
         dnsProvider = "cloudflare";
         dnsPropagationCheck = true;
-        credentialFiles.CLOUDFLARE_DNS_API_TOKEN_FILE = config.age.secrets."cloudflare-ddns-token".path;
+        credentialFiles.CLOUDFLARE_DNS_API_TOKEN_FILE = config.sops.secrets."cloudflare/ddns_token".path;
       };
     };
     users.users.nginx.extraGroups = [ "acme" ];

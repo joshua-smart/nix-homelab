@@ -22,7 +22,7 @@ in
   };
   networking.services."git.jsmart.dev".port = cfg.settings.server.HTTP_PORT;
 
-  age.secrets."gitea/restic-password".file = ../../../secrets/restic-password.age;
+  sops.secrets."restic/repository_password" = { };
   services.restic.backups =
     lib.mapAttrs
       (
@@ -48,7 +48,7 @@ in
             "${cfg.stateDir}/log"
             "${cfg.stateDir}/gitea_dump.db"
           ];
-          passwordFile = config.age.secrets."gitea/restic-password".path;
+          passwordFile = config.sops.secrets."restic/repository_password".path;
           initialize = true;
           pruneOpts = [
             "--keep-weekly 1"

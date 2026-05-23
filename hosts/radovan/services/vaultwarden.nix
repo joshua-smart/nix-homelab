@@ -5,13 +5,12 @@
     tailscale = true;
   };
 
-  age.secrets."vaultwarden.env" = {
-    file = ../../../secrets/vaultwarden.env.age;
+  sops.secrets."vaultwarden/env" = {
     owner = "vaultwarden";
   };
   services.vaultwarden = {
     enable = true;
-    environmentFile = config.age.secrets."vaultwarden.env".path;
+    environmentFile = config.sops.secrets."vaultwarden/env".path;
     config = {
       DOMAIN = "https://bitwarden.jsmart.dev";
       SIGNUPS_ALLOWED = false;
@@ -21,6 +20,7 @@
     backupDir = "/var/backup/vaultwarden";
   };
 
+  sops.secrets."restic/repository_password" = { };
   services.restic.backups =
     lib.mapAttrs
       (
@@ -33,7 +33,7 @@
             Persistent = true;
             AccuracySec = "1h";
           };
-          passwordFile = config.age.secrets."restic-password".path;
+          passwordFile = config.sops.secrets."restic/repository_password".path;
           pruneOpts = [
             "--keep-weekly 1"
             "--keep-monthly 3"

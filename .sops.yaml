@@ -1,0 +1,15 @@
+keys:
+  - &admin age1kvl84wayj4vadfj20am28ynxr2a2kkjxqf88urgh4tkf84fptdysp3xhec
+  - &radovan age1h0paccq4e2jjjtaacnd7ef8xrtz3cl26uhj3ugg7pxmhzk0shadsa55uu5
+  - &falen age1h95wcpanz727pj43eg5kg3plwwdvnvvmku5zgmdghas5uqfek5tsvks3ge
+creation_rules:
+  - path_regex: hosts/radovan/secrets.yaml$
+    key_groups:
+    - age:
+      - *admin
+      - *radovan
+  - path_regex: hosts/falen/secrets.yaml$
+    key_groups:
+    - age:
+      - *admin
+      - *falen

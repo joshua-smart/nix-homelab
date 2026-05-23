@@ -2,10 +2,9 @@
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
 
-    agenix = {
-      url = "github:ryantm/agenix";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.darwin.follows = "";
     };
 
     deploy-rs = {
@@ -25,18 +24,12 @@
     {
       self,
       nixpkgs,
-      agenix,
+      sops-nix,
       deploy-rs,
       nixos-hardware,
       ...
     }@inputs:
     let
-      authorizedKeys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOLqvqY/GcYXdRtZQThNOtSBl7xjPhEx8ZuzzwO9f7Cg js@desktop"
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM3PCmL6yPMIM3iV1CSoWmrAknwgFSEwQmGp6xBEs5NN js@laptop"
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK97cNMS1YQ08Q3Lam4RRzs0aQ4Lp1v+eoJGAKhRArFg"
-      ];
-
       inherit (nixpkgs.lib) nixosSystem filesystem;
 
       system-pkgs =
@@ -71,7 +64,7 @@
         }).deploy-rs.lib;
 
       defaultModules = (filesystem.listFilesRecursive ./modules) ++ [
-        agenix.nixosModules.default
+        sops-nix.nixosModules.sops
       ];
     in
     {
@@ -83,7 +76,7 @@
             ./hosts/radovan/configuration.nix
             inputs.nix-minecraft.nixosModules.minecraft-servers
           ];
-          specialArgs = { inherit inputs authorizedKeys; };
+          specialArgs = { inherit inputs; };
         };
         falen = nixosSystem rec {
           system = "aarch64-linux";
@@ -92,7 +85,7 @@
             ./hosts/falen/configuration.nix
             nixos-hardware.nixosModules.raspberry-pi-4
           ];
-          specialArgs = { inherit inputs authorizedKeys; };
+          specialArgs = { inherit inputs; };
         };
       };
 
@@ -130,10 +123,15 @@
           pkgs = system-pkgs "x86_64-linux";
         in
         pkgs.mkShell {
-          packages = [
-            pkgs.deploy-rs
-            agenix.packages."x86_64-linux".agenix
-          ];
+          packages =
+            (with pkgs; [
+              ssh-to-age
+              age
+              sops
+            ])
+            ++ [
+              pkgs.deploy-rs
+            ];
         };
     };
 }

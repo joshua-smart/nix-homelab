@@ -11,10 +11,10 @@
     max-free = ${toString (1024 * 1024 * 1024)}
   '';
 
-  age.secrets = {
-    "cloudflare-ddns-token".file = ../../secrets/cloudflare-ddns-token.age;
-    "headscale-auth-key".file = ../../secrets/falen-headscale-auth-key.age;
-  };
+  sops.defaultSopsFile = ./secrets.yaml;
+
+  sops.secrets."cloudflare/ddns_token" = { };
+  sops.secrets."headscale/auth_key" = { };
 
   networking.hostName = "falen";
 
@@ -25,7 +25,7 @@
       "falen.hosts.jsmart.dev"
     ];
     protocol = "cloudflare";
-    passwordFile = config.age.secrets."cloudflare-ddns-token".path;
+    passwordFile = config.sops.secrets."cloudflare/ddns_token".path;
     zone = "jsmart.dev";
     usev6 = "";
     username = "token";
@@ -34,7 +34,7 @@
   services.tailscale = {
     enable = true;
     useRoutingFeatures = "both";
-    authKeyFile = config.age.secrets."headscale-auth-key".path;
+    authKeyFile = config.sops.secrets."headscale/auth_key".path;
     extraUpFlags = [
       "--login-server"
       "https://headscale.jsmart.dev"

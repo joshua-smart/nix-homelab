@@ -1,6 +1,6 @@
 { config, ... }:
 {
-  age.secrets."cloudflare-ddns-token".file = ../../../secrets/cloudflare-ddns-token.age;
+  sops.secrets."cloudflare/ddns_token" = { };
   services.ddclient = {
     enable = true;
     interval = "15min";
@@ -11,7 +11,7 @@
     ];
     protocol = "cloudflare";
     username = "token";
-    passwordFile = config.age.secrets."cloudflare-ddns-token".path;
+    passwordFile = config.sops.secrets."cloudflare/ddns_token".path;
     zone = "jsmart.dev";
   };
   systemd.services.ddclient.after = [ "nss-user-lookup.target" ];

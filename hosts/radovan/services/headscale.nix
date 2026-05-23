@@ -5,7 +5,6 @@
     websockets = true;
   };
 
-  age.secrets."headscale-auth-key".file = ../../../secrets/radovan-headscale-auth-key.age;
   services.headscale = {
     enable = true;
     address = "0.0.0.0";

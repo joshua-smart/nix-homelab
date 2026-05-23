@@ -1,6 +1,5 @@
 {
   pkgs,
-  authorizedKeys,
   lib,
   ...
 }:
@@ -58,7 +57,9 @@
   users.users.admin = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
-    openssh.authorizedKeys.keys = authorizedKeys;
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEVMrtQMJJbeuKbVOPM1k1/LF589OdNBSIefZubSS77M"
+    ];
     packages = with pkgs; [
       tmux
       helix
