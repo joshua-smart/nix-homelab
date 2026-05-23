@@ -3,8 +3,8 @@ let
   src = fetchFromGitHub {
     owner = "joshua-smart";
     repo = "portfolio";
-    rev = "e25c990422a73557ed42309f7ae1c52d6ab1fd65";
-    sha256 = "sha256-wx2yjjbUPj4HHZdc2rif2NhG4i8Mk3ZNFu2vHwvB+QE=";
+    rev = "b8e17b1c5017c2f33b670e9901dc2d701f40b866";
+    sha256 = "sha256-uUXqKGDDy3nIIVikDRPCxW0Q8odZWAjL1Td8VD+iKw0=";
   };
 in
 callPackage (import "${src}/portfolio.nix") { }
