@@ -1,5 +1,0 @@
-- VPN
-  - [x] VPN protected services (re-configure)
-
-- Investigate prometheus monitoring
-- Declare root/admin passwords in sops

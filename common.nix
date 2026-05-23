@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  config,
   ...
 }:
 {
@@ -53,7 +54,7 @@
   services.fail2ban.enable = true;
 
   # User
-  users.mutableUsers = true;
+  users.mutableUsers = false;
   users.users.admin = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
@@ -65,6 +66,11 @@
       helix
     ];
   };
+
+  sops.secrets."users/admin/password_hash".neededForUsers = true;
+  sops.secrets."users/root/password_hash".neededForUsers = true;
+  users.users.admin.hashedPasswordFile = config.sops.secrets."users/admin/password_hash".path;
+  users.users.root.hashedPasswordFile = config.sops.secrets."users/root/password_hash".path;
 
   # Networking
   networking.firewall.allowPing = true;
