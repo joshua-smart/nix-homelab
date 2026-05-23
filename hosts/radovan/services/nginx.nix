@@ -52,8 +52,6 @@ in
 
   config = {
 
-    sops.secrets."cloudflare/ddns_token" = { };
-
     networking.firewall = {
       allowedTCPPorts = [
         80
@@ -61,6 +59,7 @@ in
       ];
     };
 
+    sops.secrets."cloudflare/certs_token" = { };
     security.acme = {
       acceptTerms = true;
       defaults.email = "josh@thesmarts.co.uk";
@@ -70,7 +69,7 @@ in
         extraDomainNames = [ "*.jsmart.dev" ];
         dnsProvider = "cloudflare";
         dnsPropagationCheck = true;
-        credentialFiles.CLOUDFLARE_DNS_API_TOKEN_FILE = config.sops.secrets."cloudflare/ddns_token".path;
+        credentialFiles.CLOUDFLARE_DNS_API_TOKEN_FILE = config.sops.secrets."cloudflare/certs_token".path;
       };
     };
     users.users.nginx.extraGroups = [ "acme" ];
