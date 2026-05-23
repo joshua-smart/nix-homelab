@@ -69,26 +69,27 @@
             })
           ];
         }).deploy-rs.lib;
+
+      defaultModules = (filesystem.listFilesRecursive ./modules) ++ [
+        agenix.nixosModules.default
+      ];
     in
     {
       nixosConfigurations = {
         radovan = nixosSystem rec {
           system = "x86_64-linux";
           pkgs = system-pkgs system;
-          modules = [
-            ./modules
+          modules = defaultModules ++ [
             ./hosts/radovan/configuration.nix
-            agenix.nixosModules.default
+            inputs.nix-minecraft.nixosModules.minecraft-servers
           ];
           specialArgs = { inherit inputs authorizedKeys; };
         };
         falen = nixosSystem rec {
           system = "aarch64-linux";
           pkgs = system-pkgs system;
-          modules = [
-            ./modules
+          modules = defaultModules ++ [
             ./hosts/falen/configuration.nix
-            agenix.nixosModules.default
             nixos-hardware.nixosModules.raspberry-pi-4
           ];
           specialArgs = { inherit inputs authorizedKeys; };
@@ -105,7 +106,7 @@
           };
         };
         falen = {
-          hostname = "192.168.1.2";
+          hostname = "192.168.0.190";
           sshUser = "admin";
           profiles.system = {
             user = "root";

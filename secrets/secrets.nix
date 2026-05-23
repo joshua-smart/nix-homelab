@@ -11,12 +11,9 @@ let
   falen = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPn618NF7nhtOVyTu8jrY9frIBFlUKkoG6XEGubHLRjG";
 in
 builtins.mapAttrs (key: hosts: { publicKeys = hosts ++ admins; }) {
-  "wireguard-private-key.age" = [ radovan ];
-  "26t-network.env.age" = [ falen ];
   "restic-password.age" = [ radovan ];
   "nextcloud-root-password.age" = [ radovan ];
   "vaultwarden.env.age" = [ radovan ];
-  "velocity-forwarding.secret.age" = [ radovan ];
   "cloudflare-ddns-token.age" = [
     radovan
     falen

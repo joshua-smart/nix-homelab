@@ -1,5 +1,12 @@
-{ pkgs, authorizedKeys, ... }:
 {
+  pkgs,
+  authorizedKeys,
+  lib,
+  ...
+}:
+{
+  imports = lib.filesystem.listFilesRecursive ./modules;
+
   # Nix related settings
   system.stateVersion = "24.05";
   nix.settings.experimental-features = [
@@ -57,4 +64,7 @@
       helix
     ];
   };
+
+  # Networking
+  networking.firewall.allowPing = true;
 }
