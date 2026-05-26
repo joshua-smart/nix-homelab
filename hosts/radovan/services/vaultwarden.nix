@@ -20,8 +20,8 @@
     backupDir = "/var/backup/vaultwarden";
   };
 
-  sops.secrets."restic/repository_password" = { };
-  services.restic.backups =
+  sops.secrets."restic/repository_password".owner = "restic";
+  services.restic.secure_backups =
     lib.mapAttrs
       (
         _: opts:
@@ -43,7 +43,7 @@
         }
       )
       {
-        "vaultwarden-local".repository = "/bulk/backup";
+        "vaultwarden-local".repository = "/bulk/backup/vaultwarden";
         "vaultwarden-remote".repository = "sftp:restic-server@falen:vaultwarden";
       };
 }

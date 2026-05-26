@@ -36,17 +36,7 @@
 
   # Remote access
   nix.settings.trusted-users = [ "@wheel" ];
-  security.sudo.extraRules = [
-    {
-      groups = [ "wheel" ];
-      commands = [
-        {
-          command = "ALL";
-          options = [ "NOPASSWD" ];
-        }
-      ];
-    }
-  ];
+  security.sudo.wheelNeedsPassword = false;
   services.openssh = {
     enable = true;
     settings.PasswordAuthentication = false;

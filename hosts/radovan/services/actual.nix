@@ -15,21 +15,15 @@
     openFirewall = false;
   };
 
-  sops.secrets."restic/repository_password" = { };
-  services.restic.backups =
+  sops.secrets."restic/repository_password".owner = "restic";
+  services.restic.secure_backups =
     lib.mapAttrs
       (
         _: opts:
         opts
         // {
-          backupPrepareCommand = /* bash */ ''
-            systemctl stop actual
-          '';
-          backupCleanupCommand = /* bash */ ''
-            systemctl start actual
-          '';
           dynamicFilesFrom = /* bash */ ''
-            readlink -f ${config.services.actual.settings.dataDir}
+            readlink -m ${config.services.actual.settings.dataDir}
           '';
           passwordFile = config.sops.secrets."restic/repository_password".path;
           initialize = true;
@@ -46,7 +40,19 @@
         }
       )
       {
-        "actual-local".repository = "/bulk/backup";
+        "actual-local".repository = "/bulk/backup/actual";
         "actual-remote".repository = "sftp:restic-server@falen:actual";
       };
+  systemd.services."restic-backups-actual-local" = {
+    conflicts = [ "actual.service" ];
+    after = [ "actual.service" ];
+    onSuccess = [ "actual.service" ];
+    onFailure = [ "actual.service" ];
+  };
+  systemd.services."restic-backups-actual-remote" = {
+    conflicts = [ "actual.service" ];
+    after = [ "actual.service" ];
+    onSuccess = [ "actual.service" ];
+    onFailure = [ "actual.service" ];
+  };
 }

@@ -58,7 +58,7 @@
 
   users.users.restic-server = {
     openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMhCO+XkG8FgUscAIw3O7TsRtkjmkXyEqTWbM09gqJ4v root@radovan"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN+Q9/X/WGyCzBSd5kqv5z40DezxMP9h187EFQQYuVOU" # restic@radovan
     ];
     home = "/srv/backup";
     createHome = true;

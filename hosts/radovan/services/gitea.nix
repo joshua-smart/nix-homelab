@@ -22,31 +22,18 @@ in
   };
   networking.services."git.jsmart.dev".port = cfg.settings.server.HTTP_PORT;
 
-  sops.secrets."restic/repository_password" = { };
-  services.restic.backups =
+  sops.secrets."restic/repository_password".owner = "restic";
+  services.restic.secure_backups =
     lib.mapAttrs
       (
         _: opts:
         opts
         // {
-          backupPrepareCommand =
-            let
-              sqlite = lib.getExe pkgs.sqlite;
-            in
-            /* bash */ ''
-              set -e
-              systemctl stop gitea
-              ${sqlite} ${cfg.stateDir}/data/gitea.db ".backup '${cfg.stateDir}/gitea_dump.db'"
-            '';
-          backupCleanupCommand = /* bash */ ''
-            systemctl start gitea
-          '';
           paths = [
             "${cfg.stateDir}/custom"
             "${cfg.stateDir}/data"
             "${cfg.stateDir}/repositories"
             "${cfg.stateDir}/log"
-            "${cfg.stateDir}/gitea_dump.db"
           ];
           passwordFile = config.sops.secrets."restic/repository_password".path;
           initialize = true;
@@ -59,7 +46,7 @@ in
       )
       {
         "gitea-local" = {
-          repository = "/bulk/backup";
+          repository = "/bulk/backup/gitea";
           timerConfig = {
             Persistent = true;
             OnCalendar = "*-*-* 00:00:00";
@@ -75,5 +62,17 @@ in
           };
         };
       };
+  systemd.services."restic-backups-gitea-local" = {
+    conflicts = [ "gitea.service" ];
+    after = [ "gitea.service" ];
+    onSuccess = [ "gitea.service" ];
+    onFailure = [ "gitea.service" ];
+  };
+  systemd.services."restic-backups-gitea-remote" = {
+    conflicts = [ "gitea.service" ];
+    after = [ "gitea.service" ];
+    onSuccess = [ "gitea.service" ];
+    onFailure = [ "gitea.service" ];
+  };
 
 }
