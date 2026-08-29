@@ -27,7 +27,6 @@
       port = 8086;
       websockets = true;
     };
-    "pdf.jsmart.dev".port = 8088;
   };
 
   services.jellyfin.enable = true;
@@ -39,13 +38,6 @@
     useRoutingFeatures = "server";
     extraUpFlags = [ "--webclient" ];
     authKeyFile = config.sops.secrets."headscale/auth_key".path;
-  };
-
-  services.stirling-pdf = {
-    enable = true;
-    environment = {
-      SERVER_PORT = 8088;
-    };
   };
 
   environment.systemPackages = with pkgs; [
